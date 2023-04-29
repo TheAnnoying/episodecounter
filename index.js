@@ -6,6 +6,15 @@ function localStorageHandle(data){
         localStorage.getItem("vidswatched") ? document.getElementById("vidswatched").innerText = localStorage.getItem("vidswatched") : document.getElementById("vidswatched").innerText = 0;
         localStorage.getItem("percentwatched") ? document.getElementById("percentwatched").setAttribute("data-tip", localStorage.getItem("percentwatched")) : document.getElementById("percentwatched").setAttribute("data-tip", "0");
         localStorage.getItem("percentwatchedvisual") ? document.getElementById("percentwatchedvisual").setAttribute("value", localStorage.getItem("percentwatchedvisual")) : document.getElementById("percentwatchedvisual").setAttribute("value", 0);
+
+        localStorage.getItem("vidswatched") > localStorage.getItem("totalvids")
+            ? document.getElementById("percentwatchedvisual").classList.add("progress-error")
+            : null;
+
+        localStorage.getItem("vidswatched") == localStorage.getItem("totalvids")
+            ? document.getElementById("percentwatchedvisual").classList.add("progress-success")
+            : null;
+
     } else if(data.mode == "set"){
         localStorage.setItem("totalvids", document.getElementById("totalvids").innerText);
         localStorage.setItem("vidswatched", document.getElementById("vidswatched").innerText);
@@ -30,6 +39,14 @@ const addTo = (element, amount, mode) => {
     document.getElementById("percentwatched").setAttribute("data-tip", `${percentage.toFixed(2)}% Watched`)
     document.getElementById("percentwatchedvisual").setAttribute("value", percentage.toFixed(2));
 
+    +videosWatched.innerText > +totalVideos.innerText
+        ? document.getElementById("percentwatchedvisual").classList.add("progress-error")
+        : document.getElementById("percentwatchedvisual").classList.remove("progress-error");
+
+    +videosWatched.innerText == +totalVideos.innerText
+        ? document.getElementById("percentwatchedvisual").classList.add("progress-success")
+        : document.getElementById("percentwatchedvisual").classList.remove("progress-success");
+
     localStorageHandle({ mode: "set" });
 };
 
@@ -47,4 +64,4 @@ document.getElementById('custominputform').onkeydown = function(e){
             document.getElementById("custominputform").value = null;
         }
     }
- };
+};
