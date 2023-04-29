@@ -25,21 +25,29 @@
             <div class="tooltip tooltip-bottom" id="percentwatched" data-tip="12.17% Watched">
                 <progress class="progress w-56 m-10" id="percentwatchedvisual" value="12.17" max="100"></progress>
             </div>
-            
-            <div class="rounded-lg p-2 bg-base-300">
-                <div class="flex gap-2 flex-row">
-                    <button class="btn" id="pluswatched">+1 Video Watched</button>
-                    <button class="btn" id="plustotal">+1 Total Videos</button>
+        
+            <div class="overflow-hidden">
+                <div class="font-medium text-2xl p-2" id="drophead">
+                    <i class="fa-solid fa-pen fa-fade" style="color: #5D5656"></i>
+                    Edit
                 </div>
-                <div class="divider">OR</div>
-                <div class="gap-3 flex flex-col items-center sm:flex-row">
-                    <input type="number" placeholder="Custom number input" id="custominputform" class="input w-full" />
-                    <div>
-                        <div class="tooltip tooltip-bottom" data-tip="Videos Watched">
-                            <input type="radio" name="radio-1" id="vidswatchedradio" class="radio" checked />
+                <div class="max-h-0 duration-500" id="dropbody">
+                    <div class="rounded-lg p-2 bg-base-300">
+                        <div class="flex gap-2 flex-row">
+                            <button class="btn" id="pluswatched">+1 Video Watched</button>
+                            <button class="btn" id="plustotal">+1 Total Videos</button>
                         </div>
-                        <div class="tooltip tooltip-bottom" data-tip="Total Videos">
-                            <input type="radio" name="radio-1" id="totalvidsradio" class="radio" />
+                        <div class="divider">OR</div>
+                        <div class="gap-3 flex flex-col items-center sm:flex-row">
+                            <input type="number" placeholder="Custom number input" id="custominputform" class="input w-full" />
+                            <div>
+                                <div class="tooltip tooltip-bottom" data-tip="Videos Watched">
+                                    <input type="radio" name="radio-1" id="vidswatchedradio" class="radio" checked />
+                                </div>
+                                <div class="tooltip tooltip-bottom" data-tip="Total Videos">
+                                    <input type="radio" name="radio-1" id="totalvidsradio" class="radio" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,5 +55,6 @@
             <label for="cleardatamodal" class="btn btn-error">Reset Stats</label>
         </div>
         <script type="module" src="/index.js"></script>
+        <script src="https://kit.fontawesome.com/d275cba850.js" crossorigin="anonymous"></script>
     </body>
 </html>
