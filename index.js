@@ -65,3 +65,20 @@ document.getElementById('custominputform').onkeydown = function(e){
         }
     }
 };
+
+document.getElementById("drophead").addEventListener("click", e => {
+    const body = e.currentTarget.nextElementSibling;
+    if(!body.style.maxHeight || body.style.maxHeight === "0px"){
+        body.style.maxHeight = `${body.scrollHeight}px`;
+        document.getElementsByClassName("fa-pen")[0].classList.remove("fa-fade");
+    } else {
+        body.style.maxHeight = "0px";
+        document.getElementsByClassName("fa-pen")[0].classList.add("fa-fade");
+    }  
+});
+
+document.getElementById("dropbody").addEventListener("resize", e => {
+    if(e.style.maxHeight && e.style.maxHeight !== "0px"){
+        e.style.maxHeight = `${e.scrollHeight}px`;
+    }
+})
