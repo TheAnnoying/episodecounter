@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="garden">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Video Counter</title>
+    </head>
+
+    <input type="checkbox" id="cleardatamodal" class="modal-toggle" />
+    <div class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Are you sure?</h3>
+            <p class="py-4">We won't judge.</p>
+            <div class="modal-action">
+                <label for="cleardatamodal" class="hover:underline mt-3 mr-5">Cancel</label>
+                <label for="cleardatamodal" id="reset" class="btn btn-error">Reset</label>
+            </div>
+        </div>
+    </div>
+
+    <body class="h-[100vh] flex flex-col justify-center items-center">
+        <div class="flex flex-col gap-3 bg-base-200 p-4 rounded-lg">
+            <div class="tooltip tooltip-bottom" data-tip="Videos Watched"><kbd class="kbd kbd-lg" id="vidswatched">144</kbd></div>
+            <div class="tooltip tooltip-bottom" data-tip="Total Videos"><kbd class="kbd kbd-lg" id="totalvids">1183</kbd></div>
+            <div class="tooltip tooltip-bottom" id="percentwatched" data-tip="12.17% Watched">
+                <progress class="progress w-56 m-10" id="percentwatchedvisual" value="12.17" max="100"></progress>
+            </div>
+
+            <div class="mt-10 rounded-lg p-2 bg-base-300">
+                <div>
+                    <button class="btn" id="pluswatched">+1 Video Watched</button>
+                    <button class="btn" id="plustotal">+1 Total Videos</button>
+                </div>
+                <div class="divider">OR</div>
+                <div class="gap-3 flex items-center">
+                    <input type="number" placeholder="Custom number input" id="custominputform" class="input w-full" />
+                    
+                    <div class="tooltip tooltip-bottom" data-tip="Videos Watched">
+                        <input type="radio" name="radio-1" id="vidswatchedradio" class="radio" checked />
+                    </div>
+
+                    <div class="tooltip tooltip-bottom" data-tip="Total Videos">
+                        <input type="radio" name="radio-1" id="totalvidsradio" class="radio" />
+                    </div>
+                </div>
+            </div>
+            <label for="cleardatamodal" class="btn btn-error">Reset Stats</label>
+        </div>
+        <script type="module" src="/index.js"></script>
+    </body>
+</html>
