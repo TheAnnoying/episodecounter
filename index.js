@@ -126,7 +126,7 @@ document.getElementById("playlistupdate").addEventListener("click", async e => {
         document.getElementsByClassName("alert-success")[0].parentElement.classList.remove("opacity-0");
         setTimeout(() => document.getElementsByClassName("toast")[0].classList.add("opacity-0"), 5000);
 
-        addTo(totalVideos, (await (await fetch(`https://inv.riverside.rocks/api/v1/playlists/${match[1]}`)).json()).videos.length, "set");
+        addTo(totalVideos, (await (await fetch(`https://inv.riverside.rocks/api/v1/playlists/${match[1]}`)).json()).videoCount, "set");
         e.target.classList.remove("loading");
     } else if(!match && document.getElementById("playlisttoggle").checked) {
         document.getElementsByClassName("alert-error")[0].parentElement.classList.remove("opacity-0");
