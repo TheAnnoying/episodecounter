@@ -9,6 +9,7 @@ function localStorageHandle(data){
         localStorage.getItem("percentwatched") ? document.getElementById("percentwatched").setAttribute("data-tip", localStorage.getItem("percentwatched")) : document.getElementById("percentwatched").setAttribute("data-tip", "0");
         localStorage.getItem("percentwatchedvisual") ? document.getElementById("percentwatchedvisual").setAttribute("value", localStorage.getItem("percentwatchedvisual")) : document.getElementById("percentwatchedvisual").setAttribute("value", 0);
         localStorage.getItem("playlisttoggle") === "true" ? document.getElementById("playlisttoggle").checked = true : document.getElementById("playlisttoggle").checked = false;
+        localStorage.getItem("playlistform") ? document.getElementById("playlistform").value = localStorage.getItem("playlistform") : null;
 
         localStorage.getItem("vidswatched") > localStorage.getItem("totalvids")
             ? document.getElementById("percentwatchedvisual").classList.add("progress-error")
@@ -23,6 +24,7 @@ function localStorageHandle(data){
         localStorage.setItem("vidswatched", document.getElementById("vidswatched").innerText);
         localStorage.setItem("percentwatched", document.getElementById("percentwatched").getAttribute("data-tip"));
         localStorage.setItem("percentwatchedvisual", document.getElementById("percentwatchedvisual").getAttribute("value"));
+        localStorage.setItem("playlistform", document.getElementById("playlistform").value);
     } else if(data.mode == "reset"){
         localStorage.clear();
         location.reload();
@@ -44,18 +46,6 @@ if(document.getElementById("playlisttoggle").checked){
     document.getElementById("playlistupdate").classList.add("btn-disabled");
 };
 
-async function updateTotalVidsFromPlaylist(){
-    const match = document.getElementById("playlistform").value.match(/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:playlist\?list=)([a-zA-Z0-9-_]{34})/);
-    
-    if(match && document.getElementById("playlisttoggle").checked){
-        document.getElementById("playlistupdate").classList.add("loading");
-
-        addTo(totalVideos, (await (await fetch(`https://inv.riverside.rocks/api/v1/playlists/${match[1]}`)).json()).videos.length, "set");
-        document.getElementById("playlistupdate").classList.remove("loading");
-    };
-}
-
-await updateTotalVidsFromPlaylist();
 
 const addTo = (element, amount, mode) => {
     mode == "add" ? element.innerText = parseInt(element.innerText)+amount : element.innerText = amount;
@@ -92,6 +82,10 @@ document.getElementById('custominputform').onkeydown = function(e){
     }
 };
 
+document.getElementById("playlistform").onkeydown = function(e){
+    localStorageHandle({ mode: "set" });
+}
+
 document.querySelectorAll(".drop-button").forEach(e => 
     e.addEventListener("click", e => {
         const clickedIndex = Array.from(e.currentTarget.parentNode.children).indexOf(e.currentTarget);
@@ -122,4 +116,21 @@ document.getElementById("playlisttoggle").addEventListener("click", () => {
     };
 });
 
-document.getElementById("playlistupdate").addEventListener("click", () => updateTotalVidsFromPlaylist());
+document.getElementById("playlistupdate").addEventListener("click", async e => {
+    // const videoLength = (await (await fetch(`https://inv.riverside.rocks/api/v1/playlists/${document.getElementById("playlistform")}`)).json()).videos.length;
+    const match = document.getElementById("playlistform").value.match(/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:playlist\?list=)([a-zA-Z0-9-_]{34})/);
+    
+    if(match && document.getElementById("playlisttoggle").checked){
+        e.target.classList.add("loading");
+
+        document.getElementsByClassName("alert-success")[0].parentElement.classList.remove("opacity-0");
+        setTimeout(() => document.getElementsByClassName("toast")[0].classList.add("opacity-0"), 5000);
+
+        addTo(totalVideos, (await (await fetch(`https://inv.riverside.rocks/api/v1/playlists/${match[1]}`)).json()).videos.length, "set");
+        e.target.classList.remove("loading");
+    } else if(!match && document.getElementById("playlisttoggle").checked) {
+        document.getElementsByClassName("alert-error")[0].parentElement.classList.remove("opacity-0");
+        setTimeout(() => document.getElementsByClassName("toast")[1].classList.add("opacity-0"), 5000);
+    };
+
+})
