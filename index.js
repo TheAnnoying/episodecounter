@@ -1,7 +1,5 @@
 import "./style.css";
 
-// console.log((await (await fetch("https://inv.riverside.rocks/api/v1/playlists/PL_YeMRB5YoBYhZ3DdtupjgbpKFU516iTq")).json()).videos.length)
-
 function localStorageHandle(data){
     if(data.mode == "find"){
         localStorage.getItem("totalvids") ? document.getElementById("totalvids").innerText = localStorage.getItem("totalvids") : document.getElementById("totalvids").innerText = 0;
@@ -10,6 +8,7 @@ function localStorageHandle(data){
         localStorage.getItem("percentwatchedvisual") ? document.getElementById("percentwatchedvisual").setAttribute("value", localStorage.getItem("percentwatchedvisual")) : document.getElementById("percentwatchedvisual").setAttribute("value", 0);
         localStorage.getItem("playlisttoggle") === "true" ? document.getElementById("playlisttoggle").checked = true : document.getElementById("playlisttoggle").checked = false;
         localStorage.getItem("playlistform") ? document.getElementById("playlistform").value = localStorage.getItem("playlistform") : null;
+        localStorage.getItem("theme") ? document.documentElement.setAttribute("data-theme", localStorage.getItem("theme")) : document.body.setAttribute("data-theme", "garden")
 
         localStorage.getItem("vidswatched") > localStorage.getItem("totalvids")
             ? document.getElementById("percentwatchedvisual").classList.add("progress-error")
@@ -25,6 +24,7 @@ function localStorageHandle(data){
         localStorage.setItem("percentwatched", document.getElementById("percentwatched").getAttribute("data-tip"));
         localStorage.setItem("percentwatchedvisual", document.getElementById("percentwatchedvisual").getAttribute("value"));
         localStorage.setItem("playlistform", document.getElementById("playlistform").value);
+        localStorage.setItem("theme", document.getElementById("themecheckbox").checked ? "dracula" : "garden");
     } else if(data.mode == "reset"){
         localStorage.clear();
         location.reload();
@@ -133,4 +133,12 @@ document.getElementById("playlistupdate").addEventListener("click", async e => {
         setTimeout(() => document.getElementsByClassName("toast")[1].classList.add("opacity-0"), 5000);
     };
 
-})
+});
+
+document.getElementById("themecheckbox").addEventListener("click", () => {
+    document.getElementById("themecheckbox").checked
+        ? document.documentElement.setAttribute("data-theme", "dracula")
+        : document.documentElement.setAttribute("data-theme", "garden");
+
+    localStorageHandle({ mode: "set" });
+});
