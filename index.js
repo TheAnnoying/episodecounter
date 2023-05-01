@@ -1,4 +1,6 @@
-import './style.css';
+import "./style.css";
+
+// console.log((await (await fetch("https://inv.riverside.rocks/api/v1/playlists/PL_YeMRB5YoBYhZ3DdtupjgbpKFU516iTq")).json()).videos.length)
 
 function localStorageHandle(data){
     if(data.mode == "find"){
@@ -6,6 +8,7 @@ function localStorageHandle(data){
         localStorage.getItem("vidswatched") ? document.getElementById("vidswatched").innerText = localStorage.getItem("vidswatched") : document.getElementById("vidswatched").innerText = 0;
         localStorage.getItem("percentwatched") ? document.getElementById("percentwatched").setAttribute("data-tip", localStorage.getItem("percentwatched")) : document.getElementById("percentwatched").setAttribute("data-tip", "0");
         localStorage.getItem("percentwatchedvisual") ? document.getElementById("percentwatchedvisual").setAttribute("value", localStorage.getItem("percentwatchedvisual")) : document.getElementById("percentwatchedvisual").setAttribute("value", 0);
+        localStorage.getItem("playlisttoggle") === "true" ? document.getElementById("playlisttoggle").checked = true : document.getElementById("playlisttoggle").checked = false;
 
         localStorage.getItem("vidswatched") > localStorage.getItem("totalvids")
             ? document.getElementById("percentwatchedvisual").classList.add("progress-error")
@@ -30,6 +33,29 @@ localStorageHandle({ mode: "find" });
 
 const totalVideos = document.getElementById("totalvids");
 const videosWatched = document.getElementById("vidswatched")
+
+if(document.getElementById("playlisttoggle").checked){
+    document.getElementById("plustotal").classList.add("btn-disabled")
+    document.getElementById("totalvidsradio").classList.add("hidden");
+    document.getElementById("playlistupdate").classList.remove("btn-disabled");
+} else {
+    document.getElementById("plustotal").classList.remove("btn-disabled");
+    document.getElementById("totalvidsradio").classList.remove("hidden");
+    document.getElementById("playlistupdate").classList.add("btn-disabled");
+};
+
+async function updateTotalVidsFromPlaylist(){
+    const match = document.getElementById("playlistform").value.match(/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:playlist\?list=)([a-zA-Z0-9-_]{34})/);
+    
+    if(match && document.getElementById("playlisttoggle").checked){
+        document.getElementById("playlistupdate").classList.add("loading");
+
+        addTo(totalVideos, (await (await fetch(`https://inv.riverside.rocks/api/v1/playlists/${match[1]}`)).json()).videos.length, "set");
+        document.getElementById("playlistupdate").classList.remove("loading");
+    };
+}
+
+await updateTotalVidsFromPlaylist();
 
 const addTo = (element, amount, mode) => {
     mode == "add" ? element.innerText = parseInt(element.innerText)+amount : element.innerText = amount;
@@ -66,19 +92,34 @@ document.getElementById('custominputform').onkeydown = function(e){
     }
 };
 
-document.getElementById("drophead").addEventListener("click", e => {
-    const body = e.currentTarget.nextElementSibling;
-    if(!body.style.maxHeight || body.style.maxHeight === "0px"){
-        body.style.maxHeight = `${body.scrollHeight}px`;
-        document.getElementsByClassName("fa-pen")[0].classList.remove("fa-fade");
+document.querySelectorAll(".drop-button").forEach(e => 
+    e.addEventListener("click", e => {
+        const clickedIndex = Array.from(e.currentTarget.parentNode.children).indexOf(e.currentTarget);
+        const bodies = Array.from(e.currentTarget.parentNode.parentNode.querySelectorAll(".drop-body"));
+        const body = bodies.splice(clickedIndex, 1)[0];
+
+        bodies.forEach(e => e.style.maxHeight = "0px");
+        if(!body.style.maxHeight || body.style.maxHeight === "0px") {
+            body.style.maxHeight = `${body.scrollHeight}px`
+            document.getElementsByClassName("fa-pen")[0].classList.remove("fa-fade");
+        } else {
+            body.style.maxHeight = "0px";
+            document.getElementsByClassName("fa-pen")[0].classList.add("fa-fade");
+        }
+    }
+));
+
+document.getElementById("playlisttoggle").addEventListener("click", () => {
+    localStorage.setItem("playlisttoggle", document.getElementById("playlisttoggle").checked);
+    if(document.getElementById("playlisttoggle").checked){
+        document.getElementById("plustotal").classList.add("btn-disabled")
+        document.getElementById("totalvidsradio").classList.add("hidden");
+        document.getElementById("playlistupdate").classList.remove("btn-disabled");
     } else {
-        body.style.maxHeight = "0px";
-        document.getElementsByClassName("fa-pen")[0].classList.add("fa-fade");
-    }  
+        document.getElementById("plustotal").classList.remove("btn-disabled");
+        document.getElementById("totalvidsradio").classList.remove("hidden");
+        document.getElementById("playlistupdate").classList.add("btn-disabled");
+    };
 });
 
-document.getElementById("dropbody").addEventListener("resize", e => {
-    if(e.style.maxHeight && e.style.maxHeight !== "0px"){
-        e.style.maxHeight = `${e.scrollHeight}px`;
-    }
-})
+document.getElementById("playlistupdate").addEventListener("click", () => updateTotalVidsFromPlaylist());

@@ -19,22 +19,41 @@
     </div>
 
     <body class="h-[100vh] flex flex-col justify-center items-center">
-        <div class="sm:hidden block text-center text-xl font-medium">View this on your PC<br>(ffs)</div>
-        <div class="sm:flex flex-col gap-3 bg-base-200 p-4 rounded-lg hidden">
+        <div class="toast duration-100 opacity-0">
+            <div class="alert alert-success shadow-lg">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Playlist URL matches</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast duration-100 opacity-0">
+            <div class="alert alert-error shadow-lg">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Playlist URL does not match</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-3 bg-base-200 p-4 rounded-lg">
             <div class="tooltip tooltip-bottom" data-tip="Videos Watched"><kbd class="kbd kbd-lg" id="vidswatched">144</kbd></div>
             <div class="tooltip tooltip-bottom" data-tip="Total Videos"><kbd class="kbd kbd-lg" id="totalvids">1183</kbd></div>
             <div class="tooltip tooltip-bottom" id="percentwatched" data-tip="12.17% Watched">
                 <progress class="progress w-56 m-10" id="percentwatchedvisual" value="12.17" max="100"></progress>
             </div>
         
-            <div class="overflow-hidden">
-                <div class="font-medium text-2xl p-2" id="drophead">
-                    <i class="fa-solid fa-pen fa-fade" style="color: #5D5656"></i>
-                    Edit
+            <div class="drop">
+                <div class="font-medium text-2xl p-2 justify-between items-center flex drop-head">
+                    <div class="drop-button">
+                        <i class="fa-solid fa-pen fa-fade text-neutral"></i>
+                        Edit
+                    </div>
+                    <i class="fa-solid fa-video text-neutral drop-button"></i>
                 </div>
-                <div class="max-h-0 duration-500" id="dropbody">
-                    <div class="rounded-lg p-2 bg-base-300">
-                        <div class="flex gap-2 flex-row">
+                <div class="max-h-0 duration-500 drop-body overflow-y-hidden">
+                    <div class="rounded-lg p-2 bg-base-300 drop-content">
+                        <div class="flex gap-2 flex-row" id="actionbtns">
                             <button class="btn" id="pluswatched">+1 Video Watched</button>
                             <button class="btn" id="plustotal">+1 Total Videos</button>
                         </div>
@@ -49,6 +68,16 @@
                                     <input type="radio" name="radio-1" id="totalvidsradio" class="radio" />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="max-h-0 duration-500 drop-body overflow-y-hidden">
+                    <div class="rounded-lg p-2 bg-base-300 drop-content flex flex-col gap-2">
+                        <input type="text" placeholder="Enter a youtube playlist URL" id="playlistform" class="input w-full" />
+                        <button class="btn" id="playlistupdate">Update Now</button>
+                        <div class="flex flex-row justify-evenly p-3">
+                            <div>Enabled</div>
+                            <input type="checkbox" class="toggle toggle-primary" id="playlisttoggle" />
                         </div>
                     </div>
                 </div>
