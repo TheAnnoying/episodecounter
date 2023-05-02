@@ -23,8 +23,6 @@ function localStorageHandle(data){
         localStorage.setItem("vidswatched", document.getElementById("vidswatched").innerText);
         localStorage.setItem("percentwatched", document.getElementById("percentwatched").getAttribute("data-tip"));
         localStorage.setItem("percentwatchedvisual", document.getElementById("percentwatchedvisual").getAttribute("value"));
-        localStorage.setItem("playlistform", document.getElementById("playlistform").value);
-        localStorage.setItem("theme", document.getElementById("themecheckbox").checked ? "dracula" : "garden");
     } else if(data.mode == "reset"){
         localStorage.clear();
         location.reload();
@@ -83,8 +81,8 @@ document.getElementById('custominputform').onkeydown = function(e){
     }
 };
 
-document.getElementById("playlistform").addEventListener("keypress", e => {
-    localStorage.setItem("playlistform", document.getElementById("playlistform").value + e.key);
+document.getElementById("playlistform").addEventListener("input", e => {
+    localStorage.setItem("playlistform", e.target.value);
 });
 
 document.querySelectorAll(".drop-button").forEach(e => 
@@ -118,7 +116,6 @@ document.getElementById("playlisttoggle").addEventListener("click", () => {
 });
 
 document.getElementById("playlistupdate").addEventListener("click", async e => {
-    // const videoLength = (await (await fetch(`https://inv.riverside.rocks/api/v1/playlists/${document.getElementById("playlistform")}`)).json()).videos.length;
     const match = document.getElementById("playlistform").value.match(/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:playlist\?list=)([a-zA-Z0-9-_]{34})/);
     
     if(match && document.getElementById("playlisttoggle").checked){
@@ -141,5 +138,5 @@ document.getElementById("themecheckbox").addEventListener("click", () => {
         ? document.documentElement.setAttribute("data-theme", "dracula")
         : document.documentElement.setAttribute("data-theme", "garden");
 
-    localStorageHandle({ mode: "set" });
+    localStorage.setItem("theme", document.getElementById("themecheckbox").checked ? "dracula" : "garden");
 });
