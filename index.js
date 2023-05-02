@@ -71,6 +71,7 @@ document.getElementById("plustotal").addEventListener("click", () => addTo(total
 document.getElementById("reset").addEventListener("click", () => { localStorageHandle({ mode: "reset" }) });
 
 document.getElementById('custominputform').onkeydown = function(e){
+    if(["e", "+", "-"].includes(e.key)) e.preventDefault();
     if(e.key == 'Enter'){
         if(document.getElementById("vidswatchedradio").checked){
             addTo(videosWatched, parseInt(document.getElementById("custominputform").value), "set");
@@ -82,9 +83,9 @@ document.getElementById('custominputform').onkeydown = function(e){
     }
 };
 
-document.getElementById("playlistform").onkeydown = function(e){
-    localStorageHandle({ mode: "set" });
-}
+document.getElementById("playlistform").addEventListener("keypress", e => {
+    localStorage.setItem("playlistform", document.getElementById("playlistform").value + e.key);
+});
 
 document.querySelectorAll(".drop-button").forEach(e => 
     e.addEventListener("click", e => {
