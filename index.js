@@ -133,10 +133,10 @@ document.getElementById("playlistupdate").addEventListener("click", async e => {
 
 });
 
-document.getElementById("themecheckbox").addEventListener("click", () => {
-    document.getElementById("themecheckbox").checked
+document.getElementById("themecheckbox").addEventListener("click", (e) => {
+    e.target.checked
         ? document.documentElement.setAttribute("data-theme", "dracula")
         : document.documentElement.setAttribute("data-theme", "garden");
 
-    localStorage.setItem("theme", document.getElementById("themecheckbox").checked ? "dracula" : "garden");
+    localStorage.setItem("theme", e.target.checked ? "dracula" : "garden");
 });
